@@ -32,7 +32,8 @@
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f",
     "docker:scanners": "docker compose --profile scanners run --rm semgrep",
-    "demo": "tsx scripts/run-5min-demo.ts"
+    "demo": "tsx scripts/run-5min-demo.ts",
+    "scan": "tsx scripts/scan.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
