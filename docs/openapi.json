@@ -1,0 +1,8 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AIShield API",
+    "version": "0.1.0",
+    "description": "REST API for the AIShield platform — automated multi-scanner security debt scoring, contextual AI risk analysis, and Pull Request governance."
+  }
+}

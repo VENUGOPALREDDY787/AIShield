@@ -1,0 +1,16 @@
+{
+  "version": "1.78.0",
+  "results": [],
+  "errors": [
+    {
+      "code": 2,
+      "level": "error",
+      "type": "RuleParseError",
+      "message": "Invalid YAML syntax in rule configuration: unclosed quote at line 14",
+      "path": "rules/custom-debt.yml"
+    }
+  ],
+  "paths": {
+    "scanned": []
+  }
+}

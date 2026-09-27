@@ -1,0 +1,16 @@
+title = "AIShield Gitleaks Secret Detection Config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Global allowlist for dummy/test tokens"
+paths = [
+    '''(?i)^\.env\.example$''',
+    '''(?i)^.*_test\.(js|ts|py|go)$''',
+    '''(?i)^.*\.test\.(js|ts|py|go)$'''
+]
+regexes = [
+    '''REPLACE_ME''',
+    '''mock-[a-zA-Z0-9_-]{16,}'''
+]

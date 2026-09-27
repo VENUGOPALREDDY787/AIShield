@@ -1,0 +1,61 @@
+name: AIShield Security Debt Analysis
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - '**'
+
+# Least-privilege permissions:
+# - contents: read (checkout repository code for static inspection)
+# - pull-requests: write (upsert the single sticky PR comment)
+# - checks: write (publish GitHub Check run)
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+# Prevent redundant concurrent scan runs on rapid push events
+concurrency:
+  group: aishield-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Security Debt Scan & PR Delta
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout HEAD commit
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so base and head commit SHAs are available for diffing
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+        continue-on-error: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build AIShield packages
+        run: |
+          npm run build:shared
+          npm run build --workspace @aishield/worker
+
+      - name: Run AIShield PR Security Analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DASHBOARD_URL: 'https://aishield.dev/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
+        run: |
+          node apps/worker/dist/github/run-pr-analysis.js

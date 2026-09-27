@@ -1,0 +1,105 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "package-lock.json",
+        "type": "lockfile"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "jsonwebtoken",
+            "version": "8.5.1",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-qwph-4952-7xr6",
+              "summary": "jsonwebtoken Insecure Key Verification",
+              "details": "jsonwebtoken versions prior to 9.0.0 are vulnerable to signature validation bypass.",
+              "aliases": [
+                "CVE-2022-23529"
+              ],
+              "database_specific": {
+                "severity": "CRITICAL",
+                "cwe_ids": ["CWE-287"]
+              },
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [{ "introduced": "0" }, { "fixed": "9.0.0" }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "semver",
+            "version": "7.3.5",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-c2qf-rxjj-qqgw",
+              "summary": "Regular Expression Denial of Service in semver",
+              "details": "semver prior to 7.5.2 is vulnerable to ReDoS.",
+              "aliases": [
+                "CVE-2022-25883"
+              ],
+              "database_specific": {
+                "severity": "MODERATE",
+                "cwe_ids": ["CWE-1333"]
+              },
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [{ "introduced": "7.0.0" }, { "fixed": "7.5.2" }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "minimist",
+            "version": "1.2.5",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-xvch-5ox4-994e",
+              "summary": "Prototype Pollution in minimist",
+              "details": "minimist prior to 1.2.6 allows prototype pollution.",
+              "aliases": [
+                "CVE-2021-44906"
+              ],
+              "database_specific": {
+                "severity": "LOW",
+                "cwe_ids": ["CWE-1321"]
+              },
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [{ "introduced": "0" }, { "fixed": "1.2.6" }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

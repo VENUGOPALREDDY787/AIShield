@@ -1,0 +1,49 @@
+{
+  "version": "1.78.0",
+  "results": [
+    {
+      "check_id": "javascript.lang.security.audit.sqli.node-postgres-sqli",
+      "path": "src/controllers/users.js",
+      "start": {
+        "line": 42,
+        "col": 5,
+        "offset": 1250
+      },
+      "end": {
+        "line": 45,
+        "col": 30,
+        "offset": 1340
+      },
+      "extra": {
+        "message": "Detected string concatenation in SQL query. This can lead to SQL injection vulnerabilities.",
+        "severity": "ERROR",
+        "metadata": {
+          "cwe": [
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          ],
+          "owasp": [
+            "A03:2021 - Injection"
+          ],
+          "category": "security",
+          "technology": [
+            "express",
+            "postgres"
+          ],
+          "confidence": "HIGH",
+          "impact": "HIGH",
+          "likelihood": "HIGH",
+          "shortlink": "https://sg.run/sql-inject-node",
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.sqli.node-postgres-sqli"
+        },
+        "lines": "const query = 'SELECT * FROM users WHERE id = ' + req.query.id;\nawait client.query(query);",
+        "fix": "await client.query('SELECT * FROM users WHERE id = $1', [req.query.id]);"
+      }
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "src/controllers/users.js"
+    ]
+  }
+}

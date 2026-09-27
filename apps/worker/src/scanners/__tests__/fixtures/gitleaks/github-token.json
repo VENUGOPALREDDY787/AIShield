@@ -1,0 +1,21 @@
+[
+  {
+    "Description": "GitHub Personal Access Token",
+    "StartLine": 28,
+    "EndLine": 28,
+    "StartColumn": 15,
+    "EndColumn": 55,
+    "Match": "ghp_mocktesttoken000000000000000000000",
+    "Secret": "ghp_mocktesttoken000000000000000000000",
+    "File": "scripts/deploy.sh",
+    "SymlinkFile": "",
+    "Commit": "f1e2d3c4b5a678901234567890abcdef12345678",
+    "Entropy": 4.15,
+    "Author": "ci-bot",
+    "Email": "bot@example.com",
+    "Date": "2026-09-26T11:00:00Z",
+    "Message": "Add deployment helper script",
+    "RuleID": "github-pat",
+    "Fingerprint": "scripts/deploy.sh:github-pat:28"
+  }
+]

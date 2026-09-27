@@ -1,0 +1,18 @@
+{
+  "$schema": "https://aishield.dev/schemas/policy.json",
+  "policyName": "Balanced Engineering Policy",
+  "checkName": "AIShield Security Debt",
+  "maxAllowedNewFindings": {
+    "maxCriticalAllowed": 0,
+    "maxHighAllowed": 0,
+    "maxMediumAllowed": 5
+  },
+  "maxNetDebtChange": 10.0,
+  "maxHeadScore": 70.0,
+  "failOnSecrets": true,
+  "requireConfirmedScannerForFail": false,
+  "warnOnHigh": true,
+  "warnOnMedium": true,
+  "warnDebtDeltaThreshold": 5.0,
+  "warnHeadScoreThreshold": 40.0
+}

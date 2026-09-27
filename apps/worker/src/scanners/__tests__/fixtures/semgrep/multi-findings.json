@@ -1,0 +1,87 @@
+{
+  "version": "1.78.0",
+  "results": [
+    {
+      "check_id": "javascript.express.security.audit.sqli.raw-query",
+      "path": "src/services/billing.ts",
+      "start": { "line": 56, "col": 7 },
+      "end": { "line": 58, "col": 12 },
+      "extra": {
+        "message": "Raw SQL concatenation in database query",
+        "severity": "ERROR",
+        "metadata": {
+          "cwe": ["CWE-89: SQL Injection"],
+          "owasp": ["A03:2021 - Injection"],
+          "confidence": "HIGH",
+          "category": "security",
+          "impact": "HIGH",
+          "likelihood": "HIGH"
+        },
+        "lines": "db.raw(`SELECT * FROM invoices WHERE id = ${invoiceId}`)",
+        "fix": "db.raw('SELECT * FROM invoices WHERE id = ?', [invoiceId])"
+      }
+    },
+    {
+      "check_id": "javascript.express.security.audit.permissive-cors",
+      "path": "src/app.ts",
+      "start": { "line": 22, "col": 1 },
+      "end": { "line": 22, "col": 30 },
+      "extra": {
+        "message": "Permissive CORS origin wildcard '*' detected",
+        "severity": "WARNING",
+        "metadata": {
+          "cwe": "CWE-942: Permissive Cross-domain Policy with Untrusted Domains",
+          "owasp": ["A05:2021 - Security Misconfiguration"],
+          "confidence": "MEDIUM",
+          "category": "security",
+          "impact": "MEDIUM",
+          "references": ["https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"]
+        },
+        "lines": "app.use(cors({ origin: '*' }));"
+      }
+    },
+    {
+      "check_id": "generic.maintainability.audit.high-cyclomatic-complexity",
+      "path": "src/utils/parser.ts",
+      "start": { "line": 105, "col": 1 },
+      "end": { "line": 180, "col": 1 },
+      "extra": {
+        "message": "Function complexity exceeds threshold (cyclomatic complexity > 25)",
+        "severity": "INFO",
+        "metadata": {
+          "category": "maintainability",
+          "confidence": "HIGH"
+        },
+        "lines": "function complexParser(input: string) { ... }"
+      }
+    },
+    {
+      "check_id": "generic.secrets.security.audit.hardcoded-jwt-secret",
+      "path": "src/auth/jwt.ts",
+      "start": { "line": 12, "col": 15 },
+      "end": { "line": 12, "col": 40 },
+      "extra": {
+        "message": "Hardcoded JWT secret token detected in source code",
+        "severity": "ERROR",
+        "metadata": {
+          "cwe": ["CWE-798: Use of Hard-coded Credentials"],
+          "owasp": ["A07:2021 - Identification and Authentication Failures"],
+          "category": "security",
+          "confidence": "HIGH",
+          "impact": "HIGH"
+        },
+        "lines": "const JWT_SECRET = 'super-secret-dev-key-12345';",
+        "fix": "const JWT_SECRET = process.env.JWT_SECRET;"
+      }
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "src/services/billing.ts",
+      "src/app.ts",
+      "src/utils/parser.ts",
+      "src/auth/jwt.ts"
+    ]
+  }
+}

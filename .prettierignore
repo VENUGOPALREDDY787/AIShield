@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+*.tsbuildinfo
+package-lock.json
+*.min.js
+*.min.css
+
+# Third-party rule/config payloads are not ours to reformat
+services/semgrep/rules/
+services/gitleaks/config/

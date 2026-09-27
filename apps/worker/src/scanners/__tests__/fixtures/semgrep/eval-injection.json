@@ -1,0 +1,44 @@
+{
+  "version": "1.78.0",
+  "results": [
+    {
+      "check_id": "javascript.lang.security.audit.eval.eval-with-expression",
+      "path": "src/utils/dynamic-calculator.ts",
+      "start": {
+        "line": 18,
+        "col": 12,
+        "offset": 450
+      },
+      "end": {
+        "line": 18,
+        "col": 35,
+        "offset": 473
+      },
+      "extra": {
+        "message": "User-controllable string passed into eval() allows arbitrary remote code execution.",
+        "severity": "ERROR",
+        "metadata": {
+          "cwe": "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')",
+          "owasp": [
+            "A03:2021 - Injection"
+          ],
+          "category": "security",
+          "confidence": "HIGH",
+          "impact": "HIGH",
+          "likelihood": "HIGH",
+          "references": [
+            "https://owasp.org/www-community/attacks/Direct_Dynamic_Code_Evaluation_Execution"
+          ]
+        },
+        "lines": "const result = eval(userFormula);",
+        "fix": "const result = safeMathParser.evaluate(userFormula);"
+      }
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "src/utils/dynamic-calculator.ts"
+    ]
+  }
+}

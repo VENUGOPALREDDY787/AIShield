@@ -1,0 +1,41 @@
+name: 'AIShield Security Debt Scan'
+description: 'Automated security debt calculation and Pull Request delta analysis'
+author: 'AIShield'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  github_token:
+    description: 'GitHub token for posting comments and checks (defaults to secrets.GITHUB_TOKEN)'
+    required: false
+    default: ${{ github.token }}
+  fail_on_critical:
+    description: 'Whether to exit with non-zero status if CRITICAL debt is detected'
+    required: false
+    default: 'false'
+  fail_on_high:
+    description: 'Whether to exit with non-zero status if HIGH debt is detected'
+    required: false
+    default: 'false'
+  dashboard_url:
+    description: 'Optional URL to AIShield dashboard'
+    required: false
+  dry_run:
+    description: 'If true, calculates debt and writes to step summary without making GitHub API mutations'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run AIShield Analysis
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        FAIL_ON_CRITICAL: ${{ inputs.fail_on_critical }}
+        FAIL_ON_HIGH: ${{ inputs.fail_on_high }}
+        DASHBOARD_URL: ${{ inputs.dashboard_url }}
+        DRY_RUN: ${{ inputs.dry_run }}
+      run: |
+        node "${{ github.action_path }}/../../../apps/worker/dist/github/run-pr-analysis.js"

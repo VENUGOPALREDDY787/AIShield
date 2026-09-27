@@ -1,0 +1,49 @@
+{
+  "name": "aishield-debt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AIShield Debt — AI-assisted security and technical-debt scanning platform",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=10.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "build:shared": "npm run build --workspace @aishield/shared",
+    "build": "npm run build:shared && npm run build --workspace @aishield/api && npm run build --workspace @aishield/worker && npm run build --workspace @aishield/ai-analyzer && npm run build --workspace @aishield/web",
+    "dev": "npm run build:shared && concurrently -k -n api,worker,web -c blue,magenta,green \"npm run dev --workspace @aishield/api\" \"npm run dev --workspace @aishield/worker\" \"npm run dev --workspace @aishield/web\"",
+    "dev:api": "npm run build:shared && npm run dev --workspace @aishield/api",
+    "dev:worker": "npm run build:shared && npm run dev --workspace @aishield/worker",
+    "dev:web": "npm run build:shared && npm run dev --workspace @aishield/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test --workspaces --if-present",
+    "verify": "npm run lint && npm run typecheck && npm run test",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:scanners": "docker compose --profile scanners run --rm semgrep",
+    "demo": "tsx scripts/run-5min-demo.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1"
+  }
+}

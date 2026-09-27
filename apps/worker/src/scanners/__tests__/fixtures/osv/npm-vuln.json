@@ -1,0 +1,61 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "package-lock.json",
+        "type": "lockfile"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "lodash",
+            "version": "4.17.20",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-35jh-r3h4-6jhm",
+              "summary": "Command Injection in lodash",
+              "details": "The package lodash prior to 4.17.21 is vulnerable to Command Injection via template.",
+              "aliases": [
+                "CVE-2021-23337"
+              ],
+              "database_specific": {
+                "severity": "HIGH",
+                "cwe_ids": [
+                  "CWE-78"
+                ],
+                "github_reviewed": true
+              },
+              "references": [
+                {
+                  "type": "ADVISORY",
+                  "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+                }
+              ],
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        { "introduced": "0" },
+                        { "fixed": "4.17.21" }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "severity": [
+                {
+                  "type": "CVSS_V3",
+                  "score": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

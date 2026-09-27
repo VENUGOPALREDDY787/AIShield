@@ -1,0 +1,11 @@
+{
+  "version": "1.78.0",
+  "results": [],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "src/index.ts",
+      "src/server.ts"
+    ]
+  }
+}

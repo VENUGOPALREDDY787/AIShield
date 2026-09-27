@@ -1,0 +1,20 @@
+rules:
+  - id: aishield-eval-injection
+    patterns:
+      - pattern: eval(...)
+    message: "Direct use of eval() detected, which introduces high-severity code execution vulnerability."
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+
+  - id: aishield-insecure-cors-wildcard
+    pattern: |
+      cors({ origin: '*' })
+    message: "Wildcard CORS origin '*' allows cross-origin requests from any website, exposing sensitive authenticated endpoints."
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-942: Permissive Cross-domain Policy with Untrusted Domains"
