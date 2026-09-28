@@ -154,7 +154,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
             name: res.repoName,
             fullName: res.repoName.includes('/') ? res.repoName : `local/${res.repoName}`,
             defaultBranch: 'main',
-            primaryLanguage: 'JavaScript',
+            primaryLanguage: res.language || 'Python',
             currentScore: res.score,
             currentGrade: res.grade as any,
             totalDebtPoints: Math.round(res.score * 1.2),
