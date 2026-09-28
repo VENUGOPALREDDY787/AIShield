@@ -148,11 +148,100 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
         isOpen={showQuickScan}
         onClose={() => setShowQuickScan(false)}
         onScanComplete={(res) => {
-          console.log('Scanned:', res);
-          // Dynamically prepend new findings
-          if (res.findings.length > 0) {
-            setFindings((prev) => [...res.findings, ...prev]);
-          }
+          const repoId = `repo-${res.repoName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+          const newRepo: RepositorySummary = {
+            id: repoId,
+            name: res.repoName,
+            fullName: res.repoName.includes('/') ? res.repoName : `local/${res.repoName}`,
+            defaultBranch: 'main',
+            primaryLanguage: 'JavaScript',
+            currentScore: res.score,
+            currentGrade: res.grade as any,
+            totalDebtPoints: Math.round(res.score * 1.2),
+            activeFindingsCount: res.findings.length,
+            criticalFindingsCount: res.findings.filter((f) => f.severity === 'CRITICAL').length,
+            highFindingsCount: res.findings.filter((f) => f.severity === 'HIGH').length,
+            mediumFindingsCount: res.findings.filter((f) => f.severity === 'MEDIUM').length,
+            lowFindingsCount: res.findings.filter((f) => f.severity === 'LOW').length,
+            trend: res.score > 50 ? 'worsening' : 'improving',
+            scanEnabled: true,
+          };
+
+          setRepositories((prev) => [newRepo, ...prev.filter((r) => r.id !== repoId)]);
+          setSelectedRepoId(repoId);
+          setFindings(res.findings);
+
+          const newHistoryEntry: DebtHistoryEntry = {
+            id: `hist-${Date.now()}`,
+            repositoryId: repoId,
+            event: 'scan_completed',
+            overallScore: res.score,
+            grade: res.grade as any,
+            recordedAt: new Date().toISOString(),
+            delta: res.score,
+            trend: res.score > 50 ? 'worsening' : 'improving',
+            severityBreakdown: {
+              CRITICAL: res.findings.filter((f) => f.severity === 'CRITICAL').length,
+              HIGH: res.findings.filter((f) => f.severity === 'HIGH').length,
+              MEDIUM: res.findings.filter((f) => f.severity === 'MEDIUM').length,
+              LOW: res.findings.filter((f) => f.severity === 'LOW').length,
+              INFO: 0,
+            },
+            categoryBreakdown: {
+              SAST: res.findings.filter((f) => f.category === 'SAST').length,
+              SECRET: res.findings.filter((f) => f.category === 'SECRET').length,
+              DEPENDENCY: 0,
+              AI_CONTEXTUAL: res.findings.filter((f) => f.category === 'AI_CONTEXTUAL').length,
+            },
+            findingCounts: {
+              total: res.findings.length,
+              open: res.findings.length,
+              new: res.findings.length,
+              resolved: 0,
+            },
+          };
+          setHistory((prev) => [newHistoryEntry, ...prev]);
+
+          const newScan: ScanDetails = {
+            id: `scan-${Date.now()}`,
+            repositoryId: repoId,
+            repositoryName: newRepo.fullName,
+            commitSha: '9988776',
+            branch: 'main',
+            trigger: 'manual',
+            enqueuedAt: new Date(Date.now() - 3000).toISOString(),
+            status: 'succeeded',
+            score: res.score,
+            grade: res.grade as any,
+            riskLevel: res.riskLevel as any,
+            startedAt: new Date(Date.now() - 2500).toISOString(),
+            finishedAt: new Date().toISOString(),
+            durationMs: 1420,
+            components: [
+              { source: 'semgrep', status: 'succeeded', durationMs: 240, findingCount: res.findings.filter((f) => f.source === 'semgrep').length },
+              { source: 'gitleaks', status: 'succeeded', durationMs: 180, findingCount: res.findings.filter((f) => f.source === 'gitleaks').length },
+              { source: 'dependency', status: 'succeeded', durationMs: 310, findingCount: 0 },
+              { source: 'ai-analyzer', status: 'succeeded', durationMs: 690, findingCount: res.findings.filter((f) => f.source === 'ai_analyzer').length },
+            ],
+            summary: {
+              totalFindings: res.findings.length,
+              newFindings: res.findings.length,
+              resolvedFindings: 0,
+              bySeverity: {
+                CRITICAL: res.findings.filter((f) => f.severity === 'CRITICAL').length,
+                HIGH: res.findings.filter((f) => f.severity === 'HIGH').length,
+                MEDIUM: res.findings.filter((f) => f.severity === 'MEDIUM').length,
+                LOW: res.findings.filter((f) => f.severity === 'LOW').length,
+              },
+              byCategory: {
+                SAST: res.findings.filter((f) => f.category === 'SAST').length,
+                SECRET: res.findings.filter((f) => f.category === 'SECRET').length,
+                DEPENDENCY: 0,
+                AI_CONTEXTUAL: res.findings.filter((f) => f.category === 'AI_CONTEXTUAL').length,
+              },
+            },
+          };
+          setScans((prev) => [newScan, ...prev]);
         }}
       />
 
