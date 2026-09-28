@@ -277,7 +277,15 @@ async function reportToGitHub() {
         text: buildPrComment(),
       },
     });
-    console.log(`✓ GitHub Check Run updated: ${conclusion.toUpperCase()}`);
+  // Always write to GitHub Step Summary (visible in the GitHub Actions UI)
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryFile) {
+    try {
+      fs.appendFileSync(summaryFile, buildPrComment() + '\n');
+      console.log('✓ Written report to GitHub Step Summary.');
+    } catch (err) {
+      console.warn('⚠️ Could not write to GITHUB_STEP_SUMMARY:', err.message);
+    }
   }
 }
 

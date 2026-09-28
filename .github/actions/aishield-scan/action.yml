@@ -16,24 +16,27 @@ inputs:
   fail_on_critical:
     description: 'Whether to exit with non-zero status if CRITICAL debt is detected'
     required: false
-    default: 'false'
+    default: 'true'
   fail-on-critical:
     description: 'Alias for fail_on_critical'
     required: false
+    default: 'true'
   fail_on_high:
     description: 'Whether to exit with non-zero status if HIGH debt is detected'
     required: false
-    default: 'false'
+    default: 'true'
   fail-on-high:
     description: 'Alias for fail_on_high'
     required: false
+    default: 'true'
   fail_on_debt_increase:
     description: 'Whether to fail if security debt increases'
     required: false
-    default: 'false'
+    default: 'true'
   fail-on-debt-increase:
     description: 'Alias for fail_on_debt_increase'
     required: false
+    default: 'true'
   dashboard_url:
     description: 'Optional URL to AIShield dashboard'
     required: false
