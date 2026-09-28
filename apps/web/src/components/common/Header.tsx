@@ -8,6 +8,7 @@ interface HeaderProps {
   onRouteChange: (route: PageRoute) => void;
   isDemoMode: boolean;
   onToggleDemoMode: (enabled: boolean) => void;
+  onOpenQuickScan?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onRouteChange,
   isDemoMode,
   onToggleDemoMode,
+  onOpenQuickScan,
 }) => {
   return (
     <header className="app-header">
@@ -48,6 +50,26 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Debt History
           </button>
+          {onOpenQuickScan && (
+            <button
+              onClick={onOpenQuickScan}
+              style={{
+                backgroundColor: '#238636',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px',
+              }}
+            >
+              ⚡ Scan Project / Repo
+            </button>
+          )}
         </nav>
       </div>
 

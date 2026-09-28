@@ -6,6 +6,7 @@ import { PullRequestPage } from './pages/PullRequestPage.js';
 import { ScanDetailsPage } from './pages/ScanDetailsPage.js';
 import { FindingDetailsPage } from './pages/FindingDetailsPage.js';
 import { DebtHistoryPage } from './pages/DebtHistoryPage.js';
+import { QuickScanModal } from './components/scans/QuickScanModal.js';
 import { fetchHealth, getDemoMode, setDemoMode } from './services/api.js';
 import type { PageRoute } from './types/index.js';
 import './App.css';
@@ -60,6 +61,7 @@ export const App: React.FC = () => {
   const [apiStatus, setApiStatus] = useState<'ok' | 'error' | 'loading'>('loading');
   const [uptimeSeconds, setUptimeSeconds] = useState<number | undefined>();
   const [isDemo, setIsDemo] = useState<boolean>(getDemoMode());
+  const [isQuickScanOpen, setIsQuickScanOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchHealth()
@@ -99,6 +101,16 @@ export const App: React.FC = () => {
         onRouteChange={handleNavigate}
         isDemoMode={isDemo}
         onToggleDemoMode={handleToggleDemo}
+        onOpenQuickScan={() => setIsQuickScanOpen(true)}
+      />
+
+      <QuickScanModal
+        isOpen={isQuickScanOpen}
+        onClose={() => setIsQuickScanOpen(false)}
+        onScanComplete={(res) => {
+          console.log('Quick scan complete:', res);
+          handleNavigate({ name: 'dashboard' });
+        }}
       />
 
       <main className="dashboard-main">

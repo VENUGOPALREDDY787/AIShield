@@ -23,6 +23,8 @@ import type {
   ScanDetails,
 } from '../types/index.js';
 
+import { QuickScanModal } from '../components/scans/QuickScanModal.js';
+
 interface DashboardPageProps {
   onNavigate: (route: PageRoute) => void;
 }
@@ -35,6 +37,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
   const [scans, setScans] = useState<ScanDetails[]>([]);
   const [findings, setFindings] = useState<DisplayFinding[]>([]);
   const [history, setHistory] = useState<DebtHistoryEntry[]>([]);
+  const [showQuickScan, setShowQuickScan] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -118,6 +121,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
         <div className="repo-actions">
           <button
+            className="btn btn-primary"
+            style={{ backgroundColor: '#238636', borderColor: '#238636', fontWeight: 'bold' }}
+            onClick={() => setShowQuickScan(true)}
+          >
+            ⚡ Scan Custom Path / Repo
+          </button>
+          <button
             className="btn btn-secondary"
             onClick={() => onNavigate({ name: 'repository', repoId: selectedRepoId })}
           >
@@ -133,6 +143,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </button>
         </div>
       </div>
+
+      <QuickScanModal
+        isOpen={showQuickScan}
+        onClose={() => setShowQuickScan(false)}
+        onScanComplete={(res) => {
+          console.log('Scanned:', res);
+          // Dynamically prepend new findings
+          if (res.findings.length > 0) {
+            setFindings((prev) => [...res.findings, ...prev]);
+          }
+        }}
+      />
 
       {loading ? (
         <div className="loading-state">
