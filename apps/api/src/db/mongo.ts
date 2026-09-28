@@ -32,7 +32,7 @@ export async function connectMongo(uri: string = env.MONGO_URI): Promise<void> {
 
   await mongoose.connect(uri, {
     maxPoolSize: env.MONGO_POOL_SIZE,
-    serverSelectionTimeoutMS: 10_000,
+    serverSelectionTimeoutMS: isProduction ? 10_000 : 2_000,
     // Index builds are a deployment concern in production, not a boot action.
     autoIndex: !isProduction,
   });

@@ -19,6 +19,7 @@ export interface CheckRunFormatterOptions {
   readonly failOnHigh?: boolean;
   readonly maxAnnotations?: number;
   readonly policyResult?: PolicyEvaluationResult;
+  readonly dashboardUrl?: string;
 }
 
 /**

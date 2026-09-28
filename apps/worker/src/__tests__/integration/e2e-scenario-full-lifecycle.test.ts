@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import type { NormalizedFinding } from '@aishield/shared';
 import { SemgrepScanner } from '../../scanners/semgrep-scanner.js';
 import { GitleaksScanner } from '../../scanners/gitleaks-scanner.js';
@@ -11,8 +11,6 @@ import { PRDeltaAnalyzer } from '../../engine/pr-delta-analyzer.js';
 import { evaluateSecurityPolicy, DEFAULT_SECURITY_POLICY } from '../../github/policy-engine.js';
 import { formatCheckRun } from '../../github/check-run-formatter.js';
 import { formatPRComment } from '../../github/comment-formatter.js';
-import { PRReporter } from '../../github/pr-reporter.js';
-import { GitHubClient } from '../../github/github-client.js';
 import { AIContextualAnalyzer } from '@aishield/ai-analyzer';
 import { MOCK_OSV_DEPENDENCY_OUTPUT } from '../../__fixtures__/security-fixtures.js';
 

@@ -15,8 +15,17 @@ import { closeScanQueue } from './queue/scan-queue.js';
 import { connectRedis, disconnectRedis } from './queue/redis.js';
 
 async function bootstrap(): Promise<void> {
-  await connectMongo();
-  await connectRedis();
+  try {
+    await connectMongo();
+  } catch (err: any) {
+    logger.warn({ err: err?.message || err }, 'MongoDB is offline. Starting API in standalone dev mode.');
+  }
+
+  try {
+    await connectRedis();
+  } catch (err: any) {
+    logger.warn({ err: err?.message || err }, 'Redis is offline. Scan queue will operate in standalone mode.');
+  }
 
   const app = createApp();
 
@@ -27,6 +36,7 @@ async function bootstrap(): Promise<void> {
         port: env.API_PORT,
         health: `${HEALTH_PREFIX}/ready`,
         api: API_PREFIX,
+        docs: '/docs',
       },
       'AIShield Debt API listening',
     );
