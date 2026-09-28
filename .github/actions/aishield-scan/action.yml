@@ -10,21 +10,49 @@ inputs:
     description: 'GitHub token for posting comments and checks (defaults to secrets.GITHUB_TOKEN)'
     required: false
     default: ${{ github.token }}
+  github-token:
+    description: 'Alias for github_token'
+    required: false
   fail_on_critical:
     description: 'Whether to exit with non-zero status if CRITICAL debt is detected'
     required: false
     default: 'false'
+  fail-on-critical:
+    description: 'Alias for fail_on_critical'
+    required: false
   fail_on_high:
     description: 'Whether to exit with non-zero status if HIGH debt is detected'
     required: false
     default: 'false'
+  fail-on-high:
+    description: 'Alias for fail_on_high'
+    required: false
+  fail_on_debt_increase:
+    description: 'Whether to fail if security debt increases'
+    required: false
+    default: 'false'
+  fail-on-debt-increase:
+    description: 'Alias for fail_on_debt_increase'
+    required: false
   dashboard_url:
     description: 'Optional URL to AIShield dashboard'
+    required: false
+  dashboard-url:
+    description: 'Alias for dashboard_url'
+    required: false
+  gemini_api_key:
+    description: 'Optional Gemini API key for AI contextual reasoning'
+    required: false
+  gemini-api-key:
+    description: 'Alias for gemini_api_key'
     required: false
   dry_run:
     description: 'If true, calculates debt and writes to step summary without making GitHub API mutations'
     required: false
     default: 'false'
+  dry-run:
+    description: 'Alias for dry_run'
+    required: false
 
 runs:
   using: 'composite'
@@ -32,10 +60,11 @@ runs:
     - name: Run AIShield Analysis
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
-        FAIL_ON_CRITICAL: ${{ inputs.fail_on_critical }}
-        FAIL_ON_HIGH: ${{ inputs.fail_on_high }}
-        DASHBOARD_URL: ${{ inputs.dashboard_url }}
-        DRY_RUN: ${{ inputs.dry_run }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token || inputs.github-token || github.token }}
+        INPUT_FAIL_ON_CRITICAL: ${{ inputs.fail_on_critical || inputs.fail-on-critical }}
+        INPUT_FAIL_ON_HIGH: ${{ inputs.fail_on_high || inputs.fail-on-high }}
+        INPUT_FAIL_ON_DEBT_INCREASE: ${{ inputs.fail_on_debt_increase || inputs.fail-on-debt-increase }}
+        INPUT_DASHBOARD_URL: ${{ inputs.dashboard_url || inputs.dashboard-url }}
+        INPUT_DRY_RUN: ${{ inputs.dry_run || inputs.dry-run }}
       run: |
-        node "${{ github.action_path }}/../../../apps/worker/dist/github/run-pr-analysis.js"
+        node "${{ github.action_path }}/run.mjs"
