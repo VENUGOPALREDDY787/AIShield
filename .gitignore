@@ -29,8 +29,8 @@ npm-debug.log*
 # Runtime artifacts (scan workspaces are ephemeral)
 .tmp/
 tmp/
-scans/
-reports/
+/scans/
+/reports/
 
 # Editor / OS noise
 .DS_Store
