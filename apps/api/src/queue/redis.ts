@@ -8,7 +8,7 @@
  */
 import { Redis } from 'ioredis';
 import type { DependencyCheck } from '@aishield/shared';
-import { env } from '../config/env.js';
+import { env, isDevelopment } from '../config/env.js';
 import { childLogger } from '../logging/logger.js';
 import { withTimeout } from '../utils/with-timeout.js';
 
@@ -16,6 +16,7 @@ const log = childLogger({ component: 'redis' });
 const PING_TIMEOUT_MS = 2_000;
 
 let client: Redis | null = null;
+let loggedOfflineWarning = false;
 
 export function getRedisClient(): Redis {
   if (client) return client;
@@ -28,11 +29,30 @@ export function getRedisClient(): Redis {
     maxRetriesPerRequest: null,
     enableReadyCheck: true,
     lazyConnect: true,
-    retryStrategy: (attempt) => Math.min(attempt * 200, 5_000),
+    retryStrategy: (attempt) => {
+      if (isDevelopment && attempt > 2) {
+        // Stop infinite retry loop in local development when Redis is not running
+        return null;
+      }
+      return Math.min(attempt * 200, 5_000);
+    },
   });
 
-  created.on('error', (error) => log.error({ err: error }, 'Redis client error'));
-  created.on('ready', () => log.info('Redis connection ready'));
+  created.on('error', (error: Error) => {
+    const code = (error as unknown as { code?: string }).code;
+    if (isDevelopment && code === 'ECONNREFUSED') {
+      if (!loggedOfflineWarning) {
+        log.warn('Redis server is not running on 127.0.0.1:6379 — scan queue is in standalone mode.');
+        loggedOfflineWarning = true;
+      }
+      return;
+    }
+    log.error({ err: error }, 'Redis client error');
+  });
+  created.on('ready', () => {
+    loggedOfflineWarning = false;
+    log.info('Redis connection ready');
+  });
   created.on('end', () => log.warn('Redis connection closed'));
 
   client = created;

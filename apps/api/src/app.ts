@@ -19,6 +19,7 @@ import { requestContext } from './middleware/request-context.js';
 import { authenticate } from './middleware/auth.js';
 import { globalRateLimit } from './middleware/rate-limit.js';
 import { healthRouter } from './routes/health.routes.js';
+import { docsRouter } from './routes/docs.routes.js';
 import { apiRouter } from './routes/index.js';
 
 export function createApp(): Express {
@@ -50,7 +51,19 @@ export function createApp(): Express {
   );
 
   // 3. Security headers and CORS, before anything can produce a response.
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
+          styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
+          imgSrc: ["'self'", 'data:', 'https://unpkg.com', 'https://validator.swagger.io'],
+          connectSrc: ["'self'", '*'],
+        },
+      },
+    }),
+  );
   app.use(
     cors({
       origin: [...corsOrigins],
@@ -65,8 +78,9 @@ export function createApp(): Express {
   app.use(express.json({ limit: env.API_BODY_LIMIT }));
   app.use(express.urlencoded({ extended: false, limit: env.API_BODY_LIMIT }));
 
-  // 5. Unauthenticated infrastructure probes (mounted before rate limiting / auth gates)
+  // 5. Unauthenticated infrastructure probes and interactive documentation
   app.use(HEALTH_PREFIX, healthRouter);
+  app.use('/', docsRouter);
 
   // 6. Security Gates: rate limiting and authentication
   app.use(globalRateLimit);
